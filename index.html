@@ -51,8 +51,10 @@
     justify-content: center;
     position: relative;
     overflow: hidden;
-    padding: 60px 20px;
+    padding: 60px 20px 80px;
     background: radial-gradient(ellipse at 60% 40%, #f9ede0 0%, #fdf6ee 60%, #f5e8d8 100%);
+    text-align: center;
+    gap: 0;
   }
 
   .hero::before {
@@ -142,29 +144,41 @@
   }
 
   .scroll-hint {
-    position: absolute;
-    bottom: 36px;
-    left: 50%;
-    transform: translateX(-50%);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
-    animation: fadeUp 1.5s ease both, pulse 2s ease-in-out 2s infinite;
-    animation-delay: 1.8s;
+    gap: 10px;
+    margin-top: 36px;
     color: var(--text-light);
-    font-size: 12px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
+    font-size: clamp(12px, 2vw, 14px);
+    letter-spacing: 0.1em;
+    font-family: 'Frank Ruhl Libre', serif;
+    font-weight: 300;
+    animation: fadeUp 1.2s ease both;
+    animation-delay: 1.3s;
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.3s ease;
+  }
+
+  .scroll-hint:hover {
+    color: var(--gold);
+    transform: translateY(3px);
+  }
+
+  .scroll-hint:hover .scroll-arrow {
+    border-color: var(--gold);
   }
 
   .scroll-arrow {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     border-right: 1.5px solid var(--gold);
     border-bottom: 1.5px solid var(--gold);
     transform: rotate(45deg);
     animation: arrowBounce 1.5s ease-in-out infinite;
+    margin-top: 2px;
   }
 
   @keyframes arrowBounce {
@@ -508,6 +522,114 @@
     50%       { opacity: 1; }
   }
 
+  /* ───── BALLOON OVERLAY ───── */
+  #balloon-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 500;
+    overflow: hidden;
+  }
+
+  .balloon {
+    position: absolute;
+    bottom: -120px;
+    font-size: clamp(32px, 6vw, 52px);
+    animation: balloonRise linear forwards;
+    opacity: 0;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.12));
+  }
+
+  @keyframes balloonRise {
+    0%   { transform: translateY(0) rotate(0deg);   opacity: 0; }
+    5%   { opacity: 1; }
+    90%  { opacity: 1; }
+    100% { transform: translateY(-110vh) rotate(var(--sway)); opacity: 0; }
+  }
+
+  /* ───── WAVE TRANSITION ───── */
+  .wave-divider {
+    position: relative;
+    height: 80px;
+    overflow: hidden;
+    margin-top: -2px;
+    background: var(--cream);
+  }
+
+  .wave-divider svg {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* ───── READING PROGRESS BAR ───── */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background: linear-gradient(to right, var(--gold-light), var(--gold), var(--deep-rose));
+    z-index: 999;
+    transition: width 0.1s linear;
+    box-shadow: 0 0 8px rgba(201,169,110,0.5);
+  }
+
+  /* ───── CANDLE ───── */
+  .candle-wrap {
+    display: inline-block;
+    margin-bottom: 6px;
+    position: relative;
+  }
+
+  .candle-emoji {
+    font-size: 42px;
+    display: inline-block;
+    animation: cakeBounce 2s ease-in-out infinite;
+    transform-origin: bottom center;
+  }
+
+  @keyframes cakeBounce {
+    0%,100% { transform: scale(1) rotate(-2deg); }
+    30%     { transform: scale(1.12) rotate(2deg); }
+    60%     { transform: scale(1.06) rotate(-1deg); }
+  }
+
+  /* ───── STAGGERED HEARTS ───── */
+  .hearts-row span {
+    opacity: 0;
+    transform: scale(0);
+    transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  }
+
+  .hearts-row.hearts-visible span:nth-child(1) { opacity:1; transform:scale(1); transition-delay:0.0s; }
+  .hearts-row.hearts-visible span:nth-child(2) { opacity:1; transform:scale(1); transition-delay:0.12s; }
+  .hearts-row.hearts-visible span:nth-child(3) { opacity:1; transform:scale(1); transition-delay:0.24s; }
+  .hearts-row.hearts-visible span:nth-child(4) { opacity:1; transform:scale(1); transition-delay:0.36s; }
+  .hearts-row.hearts-visible span:nth-child(5) { opacity:1; transform:scale(1); transition-delay:0.48s; }
+
+  /* keep the heartbeat on visible hearts */
+  .hearts-row.hearts-visible span {
+    animation: heartbeat 1.4s ease-in-out infinite;
+  }
+  .hearts-row.hearts-visible span:nth-child(1) { animation-delay:0s;    color:var(--rose); }
+  .hearts-row.hearts-visible span:nth-child(2) { animation-delay:0.15s; color:var(--gold); }
+  .hearts-row.hearts-visible span:nth-child(3) { animation-delay:0.30s; color:var(--deep-rose); }
+  .hearts-row.hearts-visible span:nth-child(4) { animation-delay:0.15s; color:var(--gold); }
+  .hearts-row.hearts-visible span:nth-child(5) { animation-delay:0s;    color:var(--rose); }
+
+  /* ───── LETTER PAPER ENTRANCE ───── */
+  .letter-paper {
+    animation: paperRise 1.2s cubic-bezier(0.22,1,0.36,1) both;
+    animation-delay: 0.2s;
+  }
+
+  @keyframes paperRise {
+    from { opacity: 0; transform: translateY(40px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0)    scale(1);    }
+  }
+
   /* ───── RESPONSIVE ───── */
   @media (max-width: 600px) {
     .letter-paper {
@@ -522,8 +644,10 @@
 </head>
 <body>
 
+<div id="balloon-overlay"></div>
 <!-- FLOATING PETALS -->
 <div id="petals-container"></div>
+<div class="progress-bar" id="progressBar"></div>
 
 <!-- HERO -->
 <section class="hero">
@@ -534,11 +658,19 @@
     יום הולדת<span>שמח, אמא</span>
   </h1>
   <div class="hero-divider"></div>
-  <div class="scroll-hint">
-    <span>פתחי את המכתב</span>
+  <div class="scroll-hint" onclick="document.querySelector('.letter-section').scrollIntoView({behavior:'smooth'})">
+    <span>לפתיחת המכתב, תלחצי כאן או פשוט תגללי 🙃</span>
     <div class="scroll-arrow"></div>
   </div>
 </section>
+
+<!-- WAVE TRANSITION -->
+<div class="wave-divider">
+  <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,40 C240,80 480,0 720,40 C960,80 1200,0 1440,40 L1440,80 L0,80 Z"
+          fill="#fefaf5"/>
+  </svg>
+</div>
 
 <!-- LETTER -->
 <section class="letter-section">
@@ -549,6 +681,7 @@
     <div class="letter-corner br">❧</div>
 
     <div class="letter-header">
+      <div class="candle-wrap"><span class="candle-emoji">🎂</span></div>
       <span class="letter-header-label">מכתב מיוחד עבורך</span>
       <div class="letter-header-title">אמא היקרה שלנו</div>
       <div class="letter-header-line">
@@ -561,6 +694,8 @@
       <p class="letter-paragraph highlight">
         אז מה אפשר לאחל לאמא מיוחדת כמוך, שמלאה בכל טוב?
       </p>
+
+
 
       <p class="letter-paragraph">
         נתחיל בברכות הרגילות ולא פחות חשובות. מזל טוב עד 120. שיהיו לך שנים מלאות באושר, שמחה ועושר פנימי וחיצוני. הצלחה בכל דבר שאת נוגעת בו, פרנסה טובה, שקט בבית, אהבה ונתינה. והכי חשוב בריאות טובה ואריכות ימים. כי בריאות זה מעל הכול.
@@ -637,11 +772,71 @@
 <section class="closing-section">
   <span class="final-flower">✿</span>
   <div class="closing-quote">
-    המכתב הזה נכתב חודש לפני יום הולדת שלך
+    לירון, אוראל ואיתי אוהבים המון ❤️
   </div>
 </section>
 
 <script>
+  // ── Balloons — burst when letter enters view ──
+  const balloonOverlay = document.getElementById('balloon-overlay');
+  const balloonEmojis = ['🎈','🎈','🎉','🎈','🎊','🎈','🎈','🎉','🎈','🎊'];
+  let balloonsLaunched = false;
+
+  function launchBalloons() {
+    if (balloonsLaunched) return;
+    balloonsLaunched = true;
+    balloonEmojis.forEach((emoji, i) => {
+      setTimeout(() => {
+        const b = document.createElement('div');
+        b.className = 'balloon';
+        b.textContent = emoji;
+        const sway = (Math.random() * 40 - 20) + 'deg';
+        const duration = 3.5 + Math.random() * 2.5;
+        b.style.cssText = `
+          left: ${5 + Math.random() * 90}vw;
+          --sway: ${sway};
+          animation-duration: ${duration}s;
+          animation-delay: 0s;
+          font-size: ${32 + Math.random() * 24}px;
+        `;
+        balloonOverlay.appendChild(b);
+        setTimeout(() => b.remove(), (duration + 0.2) * 1000);
+      }, i * 180);
+    });
+  }
+
+  const letterSection = document.querySelector('.letter-section');
+  const balloonObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        launchBalloons();
+        balloonObserver.disconnect();
+      }
+    });
+  }, { threshold: 0.1 });
+  if (letterSection) balloonObserver.observe(letterSection);
+
+  // ── Reading progress bar ──
+  const progressBar = document.getElementById('progressBar');
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    progressBar.style.width = pct + '%';
+  }, { passive: true });
+
+  // ── Staggered hearts on signature reveal ──
+  const heartsRow = document.querySelector('.hearts-row');
+  const heartsObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        setTimeout(() => heartsRow.classList.add('hearts-visible'), 300);
+        heartsObserver.disconnect();
+      }
+    });
+  }, { threshold: 0.5 });
+  if (heartsRow) heartsObserver.observe(heartsRow);
+
   // ── Sparkles around hero ──
   const hero = document.querySelector('.hero');
   const sparkleSymbols = ['✦','✧','⋆','✵','✴'];
